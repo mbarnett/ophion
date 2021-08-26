@@ -19,6 +19,8 @@ def ok; 'OK'; end
 
 before do
   @state = to_ruby_hash(env['rack.request.form_hash'])
+  puts @state
+  content_type :json
 end
 
 # routes
@@ -31,6 +33,7 @@ post '/start' do
 end
 
 post '/move' do
+  puts "MOVING"
   respond move(@state)
 end
 

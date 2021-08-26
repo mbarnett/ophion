@@ -15,7 +15,5 @@ def to_ruby_hash(hash)
 end
 
 def respond(hash)
-  content_type :json
-
   camelcase(hash).to_json
 end
