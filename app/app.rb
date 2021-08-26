@@ -4,7 +4,7 @@ require 'sinatra'
 require './app/util'
 require './app/move'
 
-use Rack::PostBodyContentTypeParser
+use Rack::JSONBodyParser
 
 
 APPEARANCE = {
@@ -18,7 +18,7 @@ APPEARANCE = {
 def ok; 'OK'; end
 
 before do
-  @state = underscore(env['rack.request.form_hash'])
+  @state = to_ruby_hash(env['rack.request.form_hash'])
 end
 
 # routes
