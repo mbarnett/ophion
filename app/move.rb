@@ -10,7 +10,6 @@ def move(board)
 
   move = MOVES.sample
 
-  puts "MOVE: " + move
-
+  puts "MOVE: #{move}"
   { move: move }
 end
