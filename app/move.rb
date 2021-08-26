@@ -8,6 +8,8 @@ def move(me, board)
 
   log "BOARD: #{board}"
 
+  set_bounds(board)
+
   at = head_loc(me)
 
   log "AT: #{at}"
@@ -60,5 +62,9 @@ def right(x, y)
 end
 
 def out_of_bounds?(x, y)
-  (x < 0) || (y < 0)
+  (x < 0) || (y < 0) || (x >= @max_x) || (y >= @max_y)
+end
+
+def set_bounds(board)
+  @max_x = board[:width]; @max_y = board[:height]
 end
