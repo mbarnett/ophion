@@ -22,10 +22,18 @@ before do
 end
 
 # routes
-get '/' { respond APPEARANCE }
+get '/' do
+  respond APPEARANCE
+end
 
-post '/start' { ok }
+post '/start' do
+  ok
+end
 
-post '/move' { respond move(@state) }
+post '/move' do
+  respond move(@state)
+end
 
-post '/end' { ok }
+post '/end' do
+  ok
+end
