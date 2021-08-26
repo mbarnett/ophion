@@ -19,9 +19,8 @@ def ok; 'OK'; end
 before do
   @world_state = to_ruby_hash(env['rack.request.form_hash'])
 
-  puts "Request: #{request.path_info}"
-  puts
-  puts "Game State: #{@world_state}"
+  log "Request: #{request.path_info}"
+  log "Game State: #{@world_state}"
 
   content_type :json
 end

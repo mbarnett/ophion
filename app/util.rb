@@ -15,7 +15,13 @@ def to_ruby_hash(hash)
 end
 
 def respond(hash)
-  puts "RESPONSE: #{hash}"
+  log "RESPONSE: #{hash}"
 
   camelcase(hash).to_json
+end
+
+# just give us a bit of extra whitespace around the messages we care about
+def log(msg)
+  puts
+  puts msg
 end
