@@ -15,5 +15,7 @@ def to_ruby_hash(hash)
 end
 
 def respond(hash)
+  puts "RESPONSE: #{hash}"
+
   camelcase(hash).to_json
 end

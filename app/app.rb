@@ -6,10 +6,9 @@ require './app/move'
 
 use Rack::JSONBodyParser
 
-
 APPEARANCE = {
   apiversion: "1",
-  author: "",           # TODO: Your Battlesnake Username
+  author: "mbarnett",
   color: "#0FB6E9",
   head: "tongue",
   tail: "bolt",
@@ -18,8 +17,12 @@ APPEARANCE = {
 def ok; 'OK'; end
 
 before do
-  @state = to_ruby_hash(env['rack.request.form_hash'])
-  puts @state
+  @world_state = to_ruby_hash(env['rack.request.form_hash'])
+
+  puts "Request: #{request.path_info}"
+  puts
+  puts "Game State: #{@world_state}"
+
   content_type :json
 end
 
@@ -33,8 +36,7 @@ post '/start' do
 end
 
 post '/move' do
-  puts "MOVING"
-  respond move(@state)
+  respond move(@world_state[:board])
 end
 
 post '/end' do

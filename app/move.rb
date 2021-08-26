@@ -6,10 +6,9 @@ MOVES = [:up, :down, :left, :right].freeze
 
 def move(board)
 
-  puts board
+  puts "BOARD: #{board}"
 
   move = MOVES.sample
 
-  puts "MOVE: #{move}"
   { move: move }
 end
