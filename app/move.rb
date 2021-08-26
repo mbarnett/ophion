@@ -10,13 +10,17 @@ def move(board)
 
   at = head_loc(board)
 
+  log "AT: #{at}"
+
   move = MOVES.sample
 
   resulting_loc = send(move, *at)
+  log resulting_loc
 
   while out_of_bounds?(resulting_loc)
     move = MOVES.sample
     resulting_loc = send(move, *at)
+    log resulting_loc
   end
 
   { move: move }
@@ -27,7 +31,8 @@ def to_loc(position_hash)
 end
 
 def head_loc(board)
-  to_loc(board[:head])
+  me = board[:snakes].select {|snake| snake.name == 'Ophion'}
+  to_loc(me[:head])
 end
 
 def food_locs(board)
