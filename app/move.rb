@@ -4,11 +4,11 @@ Move = Struct.new(:direction, :score)
 MOVES = [:up, :down, :left, :right].freeze
 
 
-def move(board)
+def move(me, board)
 
   log "BOARD: #{board}"
 
-  at = head_loc(board)
+  at = head_loc(me)
 
   log "AT: #{at}"
 
@@ -30,8 +30,7 @@ def to_loc(position_hash)
   [position_hash[:x], position_hash[:y]]
 end
 
-def head_loc(board)
-  me = board[:snakes].select {|snake| snake.name == 'Ophion'}
+def head_loc(me)
   to_loc(me[:head])
 end
 

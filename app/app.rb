@@ -35,7 +35,7 @@ post '/start' do
 end
 
 post '/move' do
-  respond move(@world_state[:board])
+  respond move(@world_state[:you], @world_state[:board])
 end
 
 post '/end' do
