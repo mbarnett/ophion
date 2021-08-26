@@ -17,7 +17,7 @@ def move(me, board)
   resulting_loc = send(move, *at)
   log resulting_loc
 
-  while out_of_bounds?(resulting_loc)
+  while out_of_bounds?(*resulting_loc)
     move = MOVES.sample
     resulting_loc = send(move, *at)
     log resulting_loc
