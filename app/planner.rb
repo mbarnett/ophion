@@ -3,12 +3,14 @@ require './app/util'
 
 class Planner
 
-  HEURISTICS = [
+  DEFAULT_HEURISTICS = [
     :avoid_bounds,
     :avoid_self,
-    :avoid_others,
-    :seek_food
+    :avoid_others
   ].freeze
+
+  HUNGRY_HEURISTICS = (DEFAULT_HEURISTICS + [:seek_food]).freeze
+  DEFENSIVE_HEURISTICS = (DEFAULT_HEURISTICS + [:seek_corner]).freeze
 
   def initialize(board)
     @board = board
@@ -17,6 +19,8 @@ class Planner
              Move.new(:left),
              Move.new(:right)]
     @moves.each {|move| setup_location(move) }
+
+    @current_strategy = board.player_hungry? ? HUNGRY_HEURISTICS : DEFENSIVE_HEURISTICS
   end
 
   def best_move
@@ -63,16 +67,19 @@ class Planner
   end
 
   def seek_food(move)
-    log "#{move.direction} score was: #{move.score}"
+    seek_entity(move, *@board.closest_food_to_player)
+  end
 
-    closest_food, distance = @board.closest_food_to_player
-    new_distance = @board.distance(move.location, closest_food)
+  def seek_corner(move)
+    seek_entity(move, *@board.closest_corner_to_player)
+  end
 
-    log "New food distance: #{new_distance}, change: #{new_distance - distance}"
+  def seek_entity(move, entity, distance)
+    new_distance = @board.distance(move.location, entity)
+
+    log "#{move.direction} new distance: #{new_distance}, change: #{new_distance - distance}"
 
     # score goes down if we're further away, up if we're closer
     move.score -= (new_distance - distance)
-
-    log "#{move.direction} score now: #{move.score}"
   end
 end

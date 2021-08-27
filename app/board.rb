@@ -5,8 +5,9 @@ class Board
   def initialize(player_json, board_json)
     player_id = player_json[:id]
 
-    log "Board: #{board_json}"
+    @player_hungry = (player_json[:health] < 40)
 
+    log "Board: #{board_json}"
 
     @max_x = board_json[:width]; @max_y = board_json[:height]
     @player_loc = to_loc(player_json[:head])
@@ -22,6 +23,8 @@ class Board
     @food_locs = @board_json[:food].map {|hash| to_loc(hash)}
     log "Food: #{@food_locs}"
   end
+
+  def player_hungry?; @player_hungry; end
 
   def out_of_bounds?(x, y)
     (x < 0) || (y < 0) || (x >= @max_x) || (y >= @max_y)
@@ -61,26 +64,38 @@ class Board
   end
 
   # top left, top right, bottom left, bottom right
-  def corners(board)
+  def corners
     [[0, @max_y - 1], [@max_x - 1, @max_y - 1], [0,0], [@max_x - 1, 0]]
   end
 
   def closest_food_to_player
-    closest_food = @food_locs.first
-    min_distance_seen = distance(@player_loc, closest_food)
+    closest_food, distance = closest_entity_to_player(@food_locs)
+    log "Closest food: #{closest_food}, dist: #{distance}"
 
-    @food_locs[1..-1].each do |loc|
+    return closest_food, distance
+  end
+
+  def closest_corner_to_player
+    closest_corner, distance = closest_entity_to_player(corners)
+    log "Closest corner: #{corner}, dist: #{distance}"
+
+    return closest_corner, distance
+  end
+
+  def closest_entity_to_player(entity_locs)
+    closest = entity_locs.first
+    min_distance_seen = distance(@player_loc, closest)
+
+    entity_locs[1..-1].each do |loc|
       dist = distance(@player_loc, loc)
 
       if dist < min_distance_seen
-        closest_food = loc
+        closest = loc
         min_distance_seen = dist
       end
     end
 
-    log "Closest food: #{closest_food}, dist: #{min_distance_seen}"
-
-    return closest_food, min_distance_seen
+    return closest, min_distance_seen
   end
 
   def distance(loc1, loc2)

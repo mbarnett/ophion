@@ -12,6 +12,6 @@ class Move
   end
 
   def to_h
-    {move: @direction}
+    { move: @direction }
   end
 end
