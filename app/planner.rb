@@ -107,14 +107,14 @@ class Planner
     log "minimum_search_threshold: #{@config.minimum_search_threshold}"
     return if move.score < @config.minimum_search_threshold
 
-    found_tail, depth_exceeded = search_for_tail(move.location, current_depth: 0, visited: Set.new)
+    found_tail = search_for_tail(move.location, current_depth: 0, visited: Set.new)
 
     log '%'*50
-    log "DEPTH EXCEEDED" if depth_exceeded
-    log "Rejecting #{move.direction} because it isn't escapable or at least very long" unless found_tail || depth_exceeded
+    log "big enough?" if !found_tail && (visited.count > @board.player_length + 3)
+    log "Rejecting #{move.direction} because it isn't escapable or at least very long" unless found_tail || (visited.count > @board.player_length + 3)
     log '%'*50
 
-    move.score -= 100 unless found_tail || depth_exceeded
+    move.score -= 100 unless found_tail || (visited.count > @board.player_length + 3)
   end
 
   def search_for_tail(location, current_depth:, visited:)

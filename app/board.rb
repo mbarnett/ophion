@@ -5,8 +5,6 @@ class Board
   def initialize(player_json, board_json, config)
     player_id = player_json[:id]
 
-    log "Board: #{board_json}"
-
     @max_x = board_json[:width]; @max_y = board_json[:height]
     @player_loc = to_loc(player_json[:head])
     @board_json = board_json
