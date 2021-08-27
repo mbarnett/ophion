@@ -60,8 +60,11 @@ class Planner
     new_distance = @board.distance(move.location, closest_food)
 
     log "New food distance: #{new_distance}, change: #{new_distance - distance}"
+    log "#{move.direction} score was: #{move.score}"
 
     # score goes down if we're further away, up if we're closer
-    move.score -= new_distance - distance
+    move.score -= (new_distance - distance)
+
+    log "#{move.direction} score now: #{move.score}"
   end
 end
