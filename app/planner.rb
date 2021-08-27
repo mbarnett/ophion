@@ -93,7 +93,7 @@ class Planner
   def attack_weaker_avoid_stronger(move)
     ATTACKABLE_LOCATION_OFFSETS[move.direction].each do |offset|
       attackable_location = @board.player_loc.zip(offset).map {|arr| arr.inject(&:+)}
-
+      log "attackable_location: #{attackable_location}"
       enemy_present, enemy_length = @board.enemy_head_at?(attackable_location)
 
       move.score += 10 if enemy_present && (enemy_length < @board.player_length)
