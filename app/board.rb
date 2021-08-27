@@ -6,6 +6,8 @@ class Board
     @max_x = board_json[:width]; @max_y = board_json[:height]
     @player_loc = to_loc(player_json[:head])
     @board_json = board_json
+
+    @player_body_locs ||= @player_json[:body].map {|hash| to_loc(hash)}
   end
 
   def out_of_bounds?(x, y)
@@ -13,7 +15,8 @@ class Board
   end
 
   def player_body_collision_at?(loc)
-  	player_body_locs.include?(loc)
+  	# can't collide with own tail
+  	player_body_locs[0...-1].include?(loc)
   end
 
   def up(x, y)
@@ -39,10 +42,6 @@ class Board
 
   def food_locs
   	@food_locs ||= @board_json[:food].map {|hash| to_loc(hash)}
-  end
-
-  def player_body_locs
-  	@player_body_locs ||= @player_json[:body].map {|hash| to_loc(hash)}.to_set
   end
 
   private
