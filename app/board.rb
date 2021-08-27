@@ -13,8 +13,6 @@ class Board
     @player_tail_at = @player_body_locs.last
     @player_length = @player_body_locs.count
 
-    @player_hungry = (player_json[:health] < config.health_hunger_threshold) || (@player_length < config.length_hunger_threshold)
-
     @enemies = []
     @enemy_heads = []
     @enemy_length_by_head = {}
@@ -26,6 +24,10 @@ class Board
       @enemy_heads << head
       @enemy_length_by_head[head] = snake_locs.count
     end
+
+    @player_hungry = (player_json[:health] < config.health_hunger_threshold) ||
+                      @player_length < config.length_hunger_threshold ||
+                      @enemies.any? {|enemy| enemy.count > @player_length} )
 
     @enemy_heads = @enemies.map { |enemy| enemy.first }
 

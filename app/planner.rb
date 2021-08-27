@@ -109,14 +109,14 @@ class Planner
     visited = Set.new
 
     log "Search: #{move.direction} at #{move.location}"
-    found_tail = search_for_deadend(move.location, current_depth: 0, visited: visited)
+    search_for_deadend(move.location, current_depth: 0, visited: visited)
 
-    move.score -= 100 if ((visited.count < @board.player_length) || (visited.count < @config.max_search_depth)) && !found_tail
+    move.score -= 100 if ((visited.count < @board.player_length) || (visited.count < @config.max_search_depth))
   end
 
   def search_for_deadend(location, current_depth:, visited:)
     log 'depth exceeded' if current_depth > @config.max_search_depth
-    return false if current_depth > @config.max_search_depth
+    return if current_depth > @config.max_search_depth
 
     log "Visited: #{visited}"
 
@@ -128,22 +128,20 @@ class Planner
     adjacencies = offsets.map { |dx, dy| [location[0] + dx, location[1] + dy] }
 
     adjacencies.each do |adjacent_location|
-      return true if @board.player_tail_at?(adjacent_location)
+     # return true if @board.player_tail_at?(adjacent_location)
       to_visit << adjacent_location unless (@board.out_of_bounds?(adjacent_location) || @board.player_body_collision_at?(adjacent_location) || @board.enemy_collision_at?(adjacent_location))
     end
 
-    return false if to_visit.empty?
+   # return false if to_visit.empty?
 
     to_visit.each do |visiting_location|
       next if visited.include?(visiting_location)
 
       log "Visiting: #{visiting_location}"
-      found_tail = search_for_deadend(visiting_location, current_depth: current_depth + 1, visited: visited)
-      return false if found_tail
+      search_for_deadend(visiting_location, current_depth: current_depth + 1, visited: visited)
+    #  return false if found_tail
     #  visited << visiting_location
     end
-
-    return false
   end
 
 end
