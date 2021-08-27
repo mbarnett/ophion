@@ -104,27 +104,27 @@ class Planner
   end
 
   def avoid_deadends(move)
-    log "minimum_search_threshold: #{@config.minimum_search_threshold}"
     return if move.score < @config.minimum_search_threshold
 
     visited = Set.new
-    found_tail = search_for_tail(move.location, current_depth: 0, visited: visited)
 
-    log '%'*50
-    log "big enough?" if !found_tail && (visited.count > @board.player_length + 3)
-    log "Rejecting #{move.direction} because it isn't escapable or at least very long" unless found_tail || (visited.count > @board.player_length + 3)
-    log '%'*50
+    log "Search: #{move.direction} at #{move.location}"
+    found_tail = search_for_tail(move.location, current_depth: 0, visited: visited)
 
     move.score -= 100 unless found_tail || (visited.count > @board.player_length + 3)
   end
 
   def search_for_tail(location, current_depth:, visited:)
+    log "%%% Depth exceeded" if @config.max_search_depth
     return false if current_depth > @config.max_search_depth
+
+    log "Visited: #{visited}"
 
     offsets = [[1,0], [-1,0], [0,1], [0,-1]]
     to_visit = []
 
     adjacencies = offsets.zip([location]*4).map {|arr| arr.inject(:+)}
+    log "adjacent locations: #{adjacencies}"
 
     adjacencies.each do |adjacent_location|
       next if visited.include?(adjacent_location)
@@ -133,6 +133,7 @@ class Planner
     end
 
     to_visit.each do |visiting_location|
+      log "Visiting: #{visiting_location}"
       found_tail = search_for_tail(visiting_location, current_depth: current_depth + 1, visited: visited)
       return true if found_tail
       visited << visiting_location
