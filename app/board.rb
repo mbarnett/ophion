@@ -77,7 +77,7 @@ class Board
 
   def closest_corner_to_player
     closest_corner, distance = closest_entity_to_player(corners)
-    log "Closest corner: #{corner}, dist: #{distance}"
+    log "Closest corner: #{closest_corner}, dist: #{distance}"
 
     return closest_corner, distance
   end
