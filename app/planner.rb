@@ -14,10 +14,7 @@ class Planner
 
   def initialize(board)
     @board = board
-    @moves = [Move.new(:up),
-             Move.new(:down),
-             Move.new(:left),
-             Move.new(:right)]
+    @moves = [:up, :down, :left, :right].map {|dir| Move.new(dir) }
     @moves.each {|move| setup_location(move) }
 
     @current_strategy = board.player_hungry? ? HUNGRY_HEURISTICS : DEFENSIVE_HEURISTICS
