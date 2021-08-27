@@ -59,7 +59,6 @@ class Board
 
   def enemy_head_at?(loc)
     is_head = @enemy_heads.include?(loc)
-
     return is_head, @enemy_length_by_head[loc]
   end
 

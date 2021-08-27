@@ -29,6 +29,8 @@ class Planner
   end
 
   def best_move
+    log "Player loc: #{@board.player_loc}"
+    log "Player length: #{@board.player_length}"
     evaluations = @moves.map {|move| evaluate_position(move) }.sort
 
     evaluations.each do |evaluation|
@@ -97,8 +99,10 @@ class Planner
 
       enemy_present, enemy_length = @board.enemy_head_at?(attackable_location)
 
+      log "Enemy present? #{enemy_present}, length: #{enemy_length}"
+
       move.score += 10 if enemy_present && (enemy_length < @board.player_length)
-      move.score -= 100 if enemy_present && (enemy_length >= @board.player_length)
+      move.score -= 90 if enemy_present && (enemy_length >= @board.player_length)
     end
   end
 
