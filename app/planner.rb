@@ -20,11 +20,13 @@ class Planner
   end
 
   def best_move
-    evaluations = @moves.map {|move| evaluate_position(move); move }
+    evaluations = @moves.map {|move| evaluate_position(move); move }.sort
 
-    log evaluations
+    evaluations.each do |evaluation|
+      log "direction: #{evaluation.direction}, score: #{evaluation.score}"
+    end
 
-    evaluations.sort.first
+    evaluations.first
   end
 
   def evaluate_position(move)
@@ -38,7 +40,6 @@ class Planner
   private
 
   def setup_location(move)
-    log move
     move.location = @board.send(move.direction, *@board.player_loc)
   end
 
