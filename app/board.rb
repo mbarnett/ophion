@@ -5,6 +5,8 @@ class Board
   def initialize(player_json, board_json)
     player_id = player_json[:id]
 
+    log "Board: #{board_json}"
+
 
     @max_x = board_json[:width]; @max_y = board_json[:height]
     @player_loc = to_loc(player_json[:head])
@@ -16,6 +18,9 @@ class Board
     @enemies = board_json[:snakes].select {|snake| snake[:id] != player_id}.map do |snake|
       snake[:body].map {|hash| to_loc(hash)}
     end
+
+    @food_locs = @board_json[:food].map {|hash| to_loc(hash)}
+    log "Food: #{@food_locs}"
   end
 
   def out_of_bounds?(x, y)
@@ -57,10 +62,6 @@ class Board
   # top left, top right, bottom left, bottom right
   def corners(board)
     [[0, @max_y - 1], [@max_x - 1, @max_y - 1], [0,0], [@max_x - 1, 0]]
-  end
-
-  def food_locs
-    @food_locs ||= @board_json[:food].map {|hash| to_loc(hash)}
   end
 
   def closest_food_to_player
