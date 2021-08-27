@@ -115,6 +115,7 @@ class Planner
   end
 
   def search_for_deadend(location, current_depth:, visited:)
+    log 'depth exceeded' if current_depth > @config.max_search_depth
     return false if current_depth > @config.max_search_depth
 
     log "Visited: #{visited}"
