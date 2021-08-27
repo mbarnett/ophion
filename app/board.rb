@@ -15,7 +15,7 @@ class Board
     @enemy_locs = board_json[:snakes].select {|snake| snake[:id] != player_id}.map do |snake|
     	snake[:body].map {|hash| to_loc(hash)}
    	end.flatten(1)
-   	log @enemy_locs
+   	log "enemy locations #{@enemy_locs.inspect}"
   end
 
   def out_of_bounds?(x, y)
