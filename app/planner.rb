@@ -39,7 +39,7 @@ class Planner
 
   def setup_location(move)
     log move
-    move.location = @board.send(move.direction)
+    move.location = @board.send(move.direction, *board.player_loc)
   end
 
   def avoid_bounds(move)
