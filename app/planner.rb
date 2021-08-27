@@ -111,11 +111,11 @@ class Planner
     log "Search: #{move.direction} at #{move.location}"
     found_tail = search_for_tail(move.location, current_depth: 0, visited: visited)
 
-    move.score -= 100 unless found_tail || (visited.count > @board.player_length + 3)
+    move.score -= 100 unless found_tail || (visited.count == @config.max_search_depth)
   end
 
   def search_for_tail(location, current_depth:, visited:)
-    log "%%% Depth exceeded" if @config.max_search_depth
+    log "%%% Depth exceeded" if current_depth > @config.max_search_depth
     return false if current_depth > @config.max_search_depth
 
     log "Visited: #{visited}"
