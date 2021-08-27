@@ -115,8 +115,8 @@ class Planner
   end
 
   def search_for_tail(location, current_depth:, visited:)
-    log "%%% Depth exceeded" if current_depth > @config.max_search_depth
-    return false if current_depth > @config.max_search_depth
+    log "%%% Depth exceeded" if visited.count > @config.max_search_depth
+    return false if visited.count > @config.max_search_depth
 
     log "Visited: #{visited}"
 
