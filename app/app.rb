@@ -14,7 +14,13 @@ APPEARANCE = {
   tail: "bolt",
 }.freeze
 
+Config = Struct.new(:health_hunger_threshold, :length_hunger_threshold)
+
 def ok; 'OK'; end
+
+configure do
+  set :config, Config.new(ENV['HEALTH_HUNGER_THRESHOLD'], ENV['LENGTH_HUNGER_THRESHOLD'])
+end
 
 before do
   @world_state = to_ruby_hash(env['rack.request.form_hash'])
@@ -35,7 +41,7 @@ post '/start' do
 end
 
 post '/move' do
-  respond Ophion.choose_move(@world_state).to_h
+  respond Ophion.choose_move(@world_state, settings.config).to_h
 end
 
 post '/end' do

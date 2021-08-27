@@ -2,7 +2,7 @@
 class Board
   attr_accessor :player_loc, :player_length
 
-  def initialize(player_json, board_json)
+  def initialize(player_json, board_json, config)
     player_id = player_json[:id]
 
     log "Board: #{board_json}"
@@ -14,7 +14,7 @@ class Board
     @player_body_locs = player_json[:body].map {|hash| to_loc(hash)}
     @player_length = @player_body_locs.count
 
-    @player_hungry = (player_json[:health] < ENV['HEALTH_HUNGER_THRESHOLD']) || (@player_length < ENV['LENGTH_HUNGER_THRESHOLD'])
+    @player_hungry = (player_json[:health] < config.health_hunger_threshold) || (@player_length < config.length_hunger_threshold)
 
     @enemies = []
     @enemy_heads = []
