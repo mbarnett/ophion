@@ -16,7 +16,7 @@ class Board
 
   def player_body_collision_at?(loc)
   	# can't collide with own tail
-  	player_body_locs[0...-1].include?(loc)
+  	@player_body_locs[0...-1].include?(loc)
   end
 
   def up(x, y)
