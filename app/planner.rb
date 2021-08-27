@@ -102,7 +102,9 @@ class Planner
       log "Enemy present? #{enemy_present}, length: #{enemy_length}"
 
       move.score += 10 if enemy_present && (enemy_length < @board.player_length)
-      move.score -= 90 if enemy_present && (enemy_length >= @board.player_length)
+      move.score -= 98 if enemy_present && (enemy_length >= @board.player_length)
+      # sliiightly better to move into an eatable position, where the enemy might not actually
+      # eat you, then to run straight out of bounds in fear
     end
   end
 

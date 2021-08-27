@@ -12,9 +12,9 @@ class Board
     @board_json = board_json
 
     @player_body_locs = player_json[:body].map {|hash| to_loc(hash)}
-    @player_size = @player_body_locs.count
+    @player_length = @player_body_locs.count
 
-    @player_hungry = (player_json[:health] < 20) || (@player_size < 4)
+    @player_hungry = (player_json[:health] < 20) || (@player_length < 4)
 
     @enemies = []
     @enemy_heads = []
