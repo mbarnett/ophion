@@ -3,7 +3,7 @@ class Board
   attr_accessor :player_loc
 
   def initialize(player_json, board_json)
-  	player_id = player_json[:id]
+    player_id = player_json[:id]
 
 
     @max_x = board_json[:width]; @max_y = board_json[:height]
@@ -11,10 +11,11 @@ class Board
     @board_json = board_json
 
     @player_body_locs = player_json[:body].map {|hash| to_loc(hash)}
+    @player_size = @player_body_locs.count
 
-    @enemy_locs = board_json[:snakes].select {|snake| snake[:id] != player_id}.map do |snake|
-    	snake[:body].map {|hash| to_loc(hash)}
-   	end.flatten(1)
+    @enemies = board_json[:snakes].select {|snake| snake[:id] != player_id}.map do |snake|
+      snake[:body].map {|hash| to_loc(hash)}
+    end
   end
 
   def out_of_bounds?(x, y)
@@ -22,12 +23,21 @@ class Board
   end
 
   def player_body_collision_at?(loc)
-  	# can't collide with own tail
-  	@player_body_locs[0...-1].include?(loc)
+    # can't collide with own tail
+    @player_body_locs[0...-1].include?(loc)
   end
 
   def enemy_collision_at?(loc)
-  	@enemy_locs.include?(loc)
+    @enemies.each do |enemy_locs|
+      collides = enemy_locs.include?(loc)
+      if enemy_locs.count >= @player_size
+        return collides, false
+      elsif enemy_locs[0] == loc
+        return collides, true
+      else
+        return collides, false
+      end
+    end
   end
 
   def up(x, y)
@@ -52,7 +62,7 @@ class Board
   end
 
   def food_locs
-  	@food_locs ||= @board_json[:food].map {|hash| to_loc(hash)}
+    @food_locs ||= @board_json[:food].map {|hash| to_loc(hash)}
   end
 
   private

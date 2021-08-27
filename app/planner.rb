@@ -30,10 +30,6 @@ class Planner
   end
 
   def evaluate_position(move)
-    # HEURISTICS.inject(move) do |evaluation, heuristic|
-    #   evaluation = self.send(heuristic, evaluation)
-    # end
-
     HEURISTICS.each { |heuristic| self.send(heuristic, move) }
   end
 
@@ -52,7 +48,9 @@ class Planner
   end
 
   def avoid_others(move)
-    move.score -= 100 if @board.enemy_collision_at?(move.location)
+    collision, favorable = @board.enemy_collision_at?(move.location)
+    move.score -= 100 if collision && !favorable
+    move.score += 50 if collision && favorable
   end
 
   def seek_food(move)
