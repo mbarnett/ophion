@@ -12,6 +12,10 @@ class Board
     (x < 0) || (y < 0) || (x >= @max_x) || (y >= @max_y)
   end
 
+  def player_body_collision_at?(loc)
+  	player_body_locs.include?(loc)
+  end
+
   def up(x, y)
     [x, y+1]
   end
@@ -34,7 +38,11 @@ class Board
   end
 
   def food_locs
-  	@food_locs = @board_json[:food].map {|hash| to_loc(hash)}
+  	@food_locs ||= @board_json[:food].map {|hash| to_loc(hash)}
+  end
+
+  def player_body_locs
+  	@player_body_locs ||= @player_json[:body].map {|hash| to_loc(hash)}.to_set
   end
 
   private

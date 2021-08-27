@@ -48,7 +48,7 @@ class Planner
   end
 
   def avoid_self(move)
-    move
+    move.score -= 100 if @board.player_body_collision_at(move.location)
   end
 
   def avoid_others(move)
