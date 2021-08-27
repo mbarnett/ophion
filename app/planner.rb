@@ -107,7 +107,8 @@ class Planner
     log "minimum_search_threshold: #{@config.minimum_search_threshold}"
     return if move.score < @config.minimum_search_threshold
 
-    found_tail = search_for_tail(move.location, current_depth: 0, visited: Set.new)
+    visited = Set.new
+    found_tail = search_for_tail(move.location, current_depth: 0, visited: visited)
 
     log '%'*50
     log "big enough?" if !found_tail && (visited.count > @board.player_length + 3)
