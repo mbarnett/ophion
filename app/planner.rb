@@ -11,10 +11,10 @@ class Planner
 
   def initialize(board)
     @board = board
-    @moves = [Move.new(direction: :up, score: 0),
-             Move.new(direction: :down, score: 0),
-             Move.new(direction: :left, score: 0),
-             Move.new(direction: :right, score: 0)].each {|move| setup_location(move) }
+    @moves = [Move.new(:up),
+             Move.new(:down),
+             Move.new(:left),
+             Move.new(:right)].each {|move| setup_location(move) }
   end
 
   def best_move(available_moves)
