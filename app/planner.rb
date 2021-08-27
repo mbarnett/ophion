@@ -34,7 +34,7 @@ class Planner
   end
 
   def evaluate_position(move)
-    HEURISTICS.each do |heuristic|
+    @current_strategy.each do |heuristic|
       log "#{move.direction} current score #{move.score}"
       log "Running #{heuristic}..."
 
