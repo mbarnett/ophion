@@ -109,9 +109,9 @@ class Planner
     visited = Set.new
 
     log "Search: #{move.direction} at #{move.location}"
-    found_tail = search_for_tail(move.location, current_depth: 0, visited: visited)
+    found_deadend = search_for_tail(move.location, current_depth: 0, visited: visited)
 
-    move.score -= 100 unless found_tail || (visited.count == @config.max_search_depth)
+    move.score -= 100 if found_deadend
   end
 
   def search_for_tail(location, current_depth:, visited:)
@@ -130,14 +130,16 @@ class Planner
 
     adjacencies.each do |adjacent_location|
       next if visited.include?(adjacent_location)
-      return true if @board.player_tail_at?(adjacent_location)
+      return false if @board.player_tail_at?(adjacent_location)
       to_visit << adjacent_location unless (@board.out_of_bounds?(adjacent_location) || @board.player_body_collision_at?(adjacent_location) || @board.enemy_collision_at?(adjacent_location))
     end
 
+    return true if to_visit.empty?
+
     to_visit.each do |visiting_location|
       log "Visiting: #{visiting_location}"
-      found_tail = search_for_tail(visiting_location, current_depth: current_depth + 1, visited: visited)
-      return true if found_tail
+      found_deadend = search_for_tail(visiting_location, current_depth: current_depth + 1, visited: visited)
+      return true if found_deadend
     #  visited << visiting_location
     end
 
