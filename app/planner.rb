@@ -110,6 +110,7 @@ class Planner
     found_tail, depth_exceeded = search_for_tail(move.location, current_depth: 0, visited: Set.new)
 
     log '%'*50
+    log "DEPTH EXCEEDED" if depth_exceeded
     log "Rejecting #{move.direction} because it isn't escapable or at least very long" unless found_tail || depth_exceeded
     log '%'*50
 
