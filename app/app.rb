@@ -19,7 +19,7 @@ Config = Struct.new(:health_hunger_threshold, :length_hunger_threshold)
 def ok; 'OK'; end
 
 configure do
-  set :config, Config.new(ENV['HEALTH_HUNGER_THRESHOLD'], ENV['LENGTH_HUNGER_THRESHOLD'])
+  set :config, Config.new(ENV['HEALTH_HUNGER_THRESHOLD'].to_i, ENV['LENGTH_HUNGER_THRESHOLD'].to_i)
 end
 
 before do
