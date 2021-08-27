@@ -7,7 +7,7 @@ class Board
     @player_loc = to_loc(player_json[:head])
     @board_json = board_json
 
-    @player_body_locs ||= @player_json[:body].map {|hash| to_loc(hash)}
+    @player_body_locs ||= player_json[:body].map {|hash| to_loc(hash)}
   end
 
   def out_of_bounds?(x, y)
