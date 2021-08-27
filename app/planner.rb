@@ -14,7 +14,8 @@ class Planner
     @moves = [Move.new(:up),
              Move.new(:down),
              Move.new(:left),
-             Move.new(:right)].each {|move| setup_location(move) }
+             Move.new(:right)]
+    @moves.each {|move| setup_location(move) }
   end
 
   def best_move(available_moves)
