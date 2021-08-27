@@ -110,6 +110,9 @@ class Planner
     search_for_deadend(move.location, current_depth: 0, visited: visited)
 
     unless visited.count > @config.max_search_depth
+      # deadends are bad, but we want a larger deadend to be worth more than a smaller one
+      # so that we always make the best of a bad situation. Hence they're worth -(100 - number
+      # of visited tiles in the deadend)
       move.score -= (100 - visited.count) if (visited.count < @board.player_length)
     end
   end
