@@ -14,7 +14,7 @@ class Board
     @player_body_locs = player_json[:body].map {|hash| to_loc(hash)}
     @player_length = @player_body_locs.count
 
-    @player_hungry = (player_json[:health] < 20) || (@player_length < 4)
+    @player_hungry = (player_json[:health] < ENV['HEALTH_HUNGER_THRESHOLD']) || (@player_length < ENV['LENGTH_HUNGER_THRESHOLD'])
 
     @enemies = []
     @enemy_heads = []
