@@ -2,7 +2,7 @@ require 'rack'
 require 'rack/contrib'
 require 'sinatra'
 require './app/util'
-require './app/move'
+require './app/ophion'
 
 use Rack::JSONBodyParser
 
@@ -35,7 +35,7 @@ post '/start' do
 end
 
 post '/move' do
-  respond move(@world_state[:you], @world_state[:board])
+  respond Ophion.choose_move(@world_state).to_h
 end
 
 post '/end' do
