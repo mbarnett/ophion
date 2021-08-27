@@ -1,12 +1,11 @@
 
 class Board
-  attr_accessor :player_loc, :food_locs
+  attr_accessor :player_loc
 
   def initialize(player_json, board_json)
     @max_x = board_json[:width]; @max_y = board_json[:height]
     @player_loc = to_loc(player_json[:head])
-
-    @food_locs = board_json[:food].map(&:to_loc)
+    @board_json = board_json
   end
 
   def out_of_bounds?(x, y)
@@ -32,6 +31,10 @@ class Board
   # top left, top right, bottom left, bottom right
   def corners(board)
     [[0, @max_y - 1], [@max_x - 1, @max_y - 1], [0,0], [@max_x - 1, 0]]
+  end
+
+  def food_locs
+  	@food_locs = @board_json[:food].map(&:to_loc)
   end
 
   private
