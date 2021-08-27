@@ -3,11 +3,19 @@ class Board
   attr_accessor :player_loc
 
   def initialize(player_json, board_json)
+  	player_id = player_json[:id]
+
+
     @max_x = board_json[:width]; @max_y = board_json[:height]
     @player_loc = to_loc(player_json[:head])
     @board_json = board_json
 
-    @player_body_locs ||= player_json[:body].map {|hash| to_loc(hash)}
+    @player_body_locs = player_json[:body].map {|hash| to_loc(hash)}
+
+    @enemy_locs = board_json[:snakes].select {|snake| snake[:id] != player_id}.map do |snake|
+    	snake[:body].map {|hash| to_loc(hash)}
+   	end.flatten(1)
+   	log @enemy_locs
   end
 
   def out_of_bounds?(x, y)
