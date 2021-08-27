@@ -133,7 +133,7 @@ class Planner
     end
 
     to_visit.each do |visiting_location|
-      found_tail, depth_exceeded = search_for_tail(visiting_location, current_depth + 1, visited: visited)
+      found_tail, depth_exceeded = search_for_tail(visiting_location, current_depth: current_depth + 1, visited: visited)
       return found_tail, depth_exceeded if found_tail || depth_exceeded
       visited << visiting_location
     end
