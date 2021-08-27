@@ -72,8 +72,6 @@ class Planner
   def avoid_others(move)
     collision = @board.enemy_collision_at?(move.location)
 
-    log "collides? #{collision}"
-
     move.score -= 100 if collision
   end
 
@@ -88,8 +86,6 @@ class Planner
   def seek_entity(move, entity, distance)
     new_distance = @board.distance(move.location, entity)
 
-    log "#{move.direction} new distance: #{new_distance}, change: #{new_distance - distance}"
-
     # score goes down if we're further away, up if we're closer
     move.score -= (new_distance - distance)
   end
@@ -98,11 +94,7 @@ class Planner
     ATTACKABLE_LOCATION_OFFSETS[move.direction].each do |offset|
       attackable_location = @board.player_loc.zip(offset).map {|arr| arr.inject(&:+)}
 
-      log "Attackable: #{attackable_location}"
-
       enemy_present, enemy_length = @board.enemy_head_at?(attackable_location)
-
-      log "Enemy present? #{enemy_present}, length: #{enemy_length}"
 
       move.score += 10 if enemy_present && (enemy_length < @board.player_length)
       move.score -= 98 if enemy_present && (enemy_length >= @board.player_length)
@@ -115,6 +107,9 @@ class Planner
     return if move.score < @config.minimum_search_threshold
 
     found_tail, depth_exceeded = search_for_tail(move.location, current_depth: 0, visited: Set.new)
+
+    log "Rejecting #{move.direction} because it isn't escapable or at least very long" unless found_tail || depth_exceeded
+
     move.score -= 100 unless found_tail || depth_exceeded
   end
 

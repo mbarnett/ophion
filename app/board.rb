@@ -32,7 +32,6 @@ class Board
     @enemy_heads = @enemies.map { |enemy| enemy.first }
 
     @food_locs = @board_json[:food].map {|hash| to_loc(hash)}
-    log "Food: #{@food_locs}"
   end
 
   def player_hungry?; @player_hungry; end
@@ -48,11 +47,7 @@ class Board
   end
 
   def enemy_collision_at?(loc)
-    log "looking for enemy collisions at #{loc}"
-
     @enemies.each do |enemy_locs|
-      log "enemy: #{enemy_locs}"
-
       # can't collide with enemy tail, since they have to move too
       return true if enemy_locs[0...-1].include?(loc)
     end
