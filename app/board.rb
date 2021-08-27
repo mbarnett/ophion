@@ -76,6 +76,9 @@ class Board
         min_distance_seen = dist
       end
     end
+
+    log "Closest food: #{closest_food}, dist: #{min_distance_seen}"
+
     return closest_food, min_distance_seen
   end
 
