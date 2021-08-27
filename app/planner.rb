@@ -129,7 +129,7 @@ class Planner
     adjacencies.each do |adjacent_location|
       next if visited.include?(adjacent_location)
       return true, false if @board.player_tail_at?(adjacent_location)
-      to_visit << adjacent_location unless (@board.out_of_bounds(adjacent_location) || @board.player_body_collision_at(adjacent_location) || @board.enemy_collision_at(adjacent_location))
+      to_visit << adjacent_location unless (@board.out_of_bounds?(adjacent_location) || @board.player_body_collision_at?(adjacent_location) || @board.enemy_collision_at?(adjacent_location))
     end
 
     to_visit.each do |visiting_location|
