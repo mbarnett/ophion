@@ -123,11 +123,14 @@ class Planner
     offsets = [[1,0], [-1,0], [0,1], [0,-1]]
     to_visit = []
 
-    log "loc: #{location}"
-    log "thing: #{offsets.zip([location, location, location, location])}"
+    adjacencies = []
 
-    adjacencies = offsets.zip([location*4]).map {|arr| arr.inject(&:+)}
-   # log "adjacent locations: #{adjacencies}"
+    offsets.map do |dx, dy|
+      x, y = location
+
+      [x + dx, y + dy]
+    end
+   log "adjacent locations: #{adjacencies}"
 
     adjacencies.each do |adjacent_location|
       next if visited.include?(adjacent_location)
