@@ -26,8 +26,8 @@ class Board
     end
 
     @player_hungry = (player_json[:health] < config.health_hunger_threshold) ||
-                      @player_length < config.length_hunger_threshold ||
-                      @enemies.any? {|enemy| enemy.count > @player_length} )
+                      (@player_length < config.length_hunger_threshold) ||
+                      (@enemies.any? {|enemy| enemy.count > @player_length})
 
     @enemy_heads = @enemies.map { |enemy| enemy.first }
 
