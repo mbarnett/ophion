@@ -115,10 +115,10 @@ class Planner
   end
 
   def search_for_tail(location, current_depth:, visited:)
-  #  log "%%% Depth exceeded" if @config.max_search_depth
+    log "%%% Depth exceeded" if @config.max_search_depth
     return false if current_depth > @config.max_search_depth
 
- #   log "Visited: #{visited}"
+    log "Visited: #{visited}"
 
     offsets = [[1,0], [-1,0], [0,1], [0,-1]]
     to_visit = []
@@ -133,7 +133,7 @@ class Planner
     end
 
     to_visit.each do |visiting_location|
- #     log "Visiting: #{visiting_location}"
+      log "Visiting: #{visiting_location}"
       found_tail = search_for_tail(visiting_location, current_depth: current_depth + 1, visited: visited)
       return true if found_tail
       visited << visiting_location
