@@ -80,7 +80,10 @@ class Board
   end
 
   def distance(loc1, loc2)
-    Math.sqrt((loc2.y - loc1.y)**2 + (loc2.x - loc1.x)**2 )
+    loc1_x, loc1_y = loc1
+    loc2_x, loc2_y = loc2
+
+    Math.sqrt((loc2_y - loc1_y)**2 + (loc2_x - loc1_x)**2 )
   end
 
   private
