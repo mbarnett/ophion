@@ -115,16 +115,19 @@ class Planner
   end
 
   def search_for_tail(location, current_depth:, visited:)
-    log "%%% Depth exceeded" if @config.max_search_depth
+  #  log "%%% Depth exceeded" if @config.max_search_depth
     return false if current_depth > @config.max_search_depth
 
-    log "Visited: #{visited}"
+ #   log "Visited: #{visited}"
 
     offsets = [[1,0], [-1,0], [0,1], [0,-1]]
     to_visit = []
 
+    log location
+    log offsets.zip([location]*4)
+
     adjacencies = offsets.zip([location]*4).map {|arr| arr.inject(:+)}
-    log "adjacent locations: #{adjacencies}"
+   # log "adjacent locations: #{adjacencies}"
 
     adjacencies.each do |adjacent_location|
       next if visited.include?(adjacent_location)
@@ -133,7 +136,7 @@ class Planner
     end
 
     to_visit.each do |visiting_location|
-      log "Visiting: #{visiting_location}"
+ #     log "Visiting: #{visiting_location}"
       found_tail = search_for_tail(visiting_location, current_depth: current_depth + 1, visited: visited)
       return true if found_tail
       visited << visiting_location
