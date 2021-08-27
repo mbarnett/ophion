@@ -113,7 +113,7 @@ class Planner
 
     puts @config.max_search_depth
 
-    unless visited.count < @config.max_search_depth
+    unless visited.count > @config.max_search_depth
       move.score -= 100 if (visited.count < @board.player_length)
     end
   end
