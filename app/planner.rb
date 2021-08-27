@@ -126,7 +126,7 @@ class Planner
     log "loc: #{location}"
     log "thing: #{offsets.zip([location]*4)}"
 
-    adjacencies = offsets.zip([location]*4).map {|arr| arr.inject(:+)}
+    adjacencies = offsets.zip([location]*4).map {|arr| arr.inject(&:+)}
    # log "adjacent locations: #{adjacencies}"
 
     adjacencies.each do |adjacent_location|
