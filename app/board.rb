@@ -63,7 +63,7 @@ class Board
     @food_locs ||= @board_json[:food].map {|hash| to_loc(hash)}
   end
 
-  def closest_food_loc_to_player
+  def closest_food_to_player
     closest_food = @food_locs.first
     min_distance_seen = distance(@player_loc, closest_food)
 
