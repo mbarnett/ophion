@@ -8,7 +8,7 @@ class Move
   end
 
   def <=>(other_score)
-    other_score <=> @score
+    @score <=> other_score
   end
 
   def to_h
