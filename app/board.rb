@@ -41,6 +41,7 @@ class Board
       # can't collide with enemy tail, since they have to move too
       return true if enemy_locs[0...-1].include?(loc)
     end
+    false
   end
 
   def up(x, y)
