@@ -109,9 +109,9 @@ class Planner
     visited = Set.new
 
     log "Search: #{move.direction} at #{move.location}"
-    found_deadend = search_for_deadend(move.location, current_depth: 0, visited: visited)
-    log "********* DEADEND #{move.direction}" if found_deadend
-    move.score -= 100 if found_deadend
+    search_for_deadend(move.location, current_depth: 0, visited: visited)
+
+    move.score -= 100 if visited.count < @board.player_length
   end
 
   def search_for_deadend(location, current_depth:, visited:)
