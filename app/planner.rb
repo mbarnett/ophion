@@ -111,7 +111,11 @@ class Planner
     log "Search: #{move.direction} at #{move.location}"
     search_for_deadend(move.location, current_depth: 0, visited: visited)
 
-    move.score -= 100 if ((visited.count < @board.player_length) || (visited.count < @config.max_search_depth))
+    puts @config.max_search_depth
+
+    unless visited.count < @config.max_search_depth
+      move.score -= 100 if (visited.count < @board.player_length)
+    end
   end
 
   def search_for_deadend(location, current_depth:, visited:)
