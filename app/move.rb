@@ -7,8 +7,8 @@ class Move
     @location = nil
   end
 
-  def <=>(other_score)
-    @score <=> other_score
+  def <=>(other)
+    other.score <=> @score
   end
 
   def to_h
