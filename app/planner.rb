@@ -19,7 +19,7 @@ class Planner
   end
 
   def best_move(available_moves)
-    evaluations = @moves.map {|move| evaluate_position(move) }
+    evaluations = @moves.map {|move| evaluate_position(move); move }
 
     log evaluations
 
