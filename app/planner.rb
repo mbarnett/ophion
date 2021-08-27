@@ -97,7 +97,7 @@ class Planner
       enemy_present, enemy_length = @board.enemy_head_at?(attackable_location)
 
       move.score += 10 if enemy_present && (enemy_length < @board.player_length)
-      move.score -= 98 if enemy_present && (enemy_length >= @board.player_length)
+      move.score -= 95 if enemy_present && (enemy_length >= @board.player_length)
       # sliiightly better to move into an eatable position, where the enemy might not actually
       # eat you, then to run straight out of bounds in fear
     end
@@ -114,7 +114,7 @@ class Planner
     puts @config.max_search_depth
 
     unless visited.count > @config.max_search_depth
-      move.score -= 100 if (visited.count < @board.player_length)
+      move.score -= 97 if (visited.count < @board.player_length)
     end
   end
 
