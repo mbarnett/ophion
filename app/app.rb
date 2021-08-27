@@ -32,7 +32,6 @@ before do
   @world_state = to_ruby_hash(env['rack.request.form_hash'])
 
   log "Request: #{request.path_info}"
-  log "Game State: #{@world_state}"
 
   content_type :json
 end

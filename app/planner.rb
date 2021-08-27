@@ -118,7 +118,7 @@ class Planner
   end
 
   def search_for_tail(location, current_depth:, visited:)
-    return false, true if current_depth > @config.max_search_depth
+    return false if current_depth > @config.max_search_depth
 
     offsets = [[1,0], [-1,0], [0,1], [0,-1]]
     to_visit = []
@@ -127,17 +127,17 @@ class Planner
 
     adjacencies.each do |adjacent_location|
       next if visited.include?(adjacent_location)
-      return true, false if @board.player_tail_at?(adjacent_location)
+      return true if @board.player_tail_at?(adjacent_location)
       to_visit << adjacent_location unless (@board.out_of_bounds?(adjacent_location) || @board.player_body_collision_at?(adjacent_location) || @board.enemy_collision_at?(adjacent_location))
     end
 
     to_visit.each do |visiting_location|
-      found_tail, depth_exceeded = search_for_tail(visiting_location, current_depth: current_depth + 1, visited: visited)
-      return found_tail, depth_exceeded if found_tail || depth_exceeded
+      found_tail = search_for_tail(visiting_location, current_depth: current_depth + 1, visited: visited)
+      return true if found_tail
       visited << visiting_location
     end
 
-    return false, false
+    return false
   end
 
 end

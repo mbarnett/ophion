@@ -9,7 +9,7 @@ class Ophion
   end
 
   def choose_move(world_state)
-    log "Hunger threshold: health: #{config.health_hunger_threshold}, length: #{config.length_hunger_threshold}"
+    log "Turn: #{world_state[:turn]}"
 
     board = Board.new(world_state[:you], world_state[:board], config)
 
