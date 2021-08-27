@@ -52,7 +52,7 @@ class Planner
   end
 
   def avoid_others(move)
-    move
+    move.score -= 100 if @board.enemy_collision_at?(move.location)
   end
 
   def seek_food(move)
