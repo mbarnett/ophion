@@ -110,12 +110,11 @@ class Planner
 
     log "Search: #{move.direction} at #{move.location}"
     found_deadend = search_for_tail(move.location, current_depth: 0, visited: visited)
-
+    log "********* DEADEND #{move.direction}" if found_deadend
     move.score -= 100 if found_deadend
   end
 
   def search_for_tail(location, current_depth:, visited:)
-    log "%%% Depth exceeded" if current_depth > @config.max_search_depth
     return false if current_depth > @config.max_search_depth
 
     log "Visited: #{visited}"
@@ -126,7 +125,6 @@ class Planner
     to_visit = []
 
     adjacencies = offsets.map { |dx, dy| [location[0] + dx, location[1] + dy] }
-    log "adjacent locations: #{adjacencies}"
 
     adjacencies.each do |adjacent_location|
       next if visited.include?(adjacent_location)
