@@ -48,15 +48,18 @@ class Planner
   end
 
   def avoid_others(move)
-    collision, favorable = @board.enemy_collision_at?(move.location)
+    collision = @board.enemy_collision_at?(move.location)
 
-    log "collides? #{collision}, favorable? #{favorable}"
+    log "collides? #{collision}"
 
-    move.score -= 100 if collision && !favorable
-    move.score += 50 if collision && favorable
+    move.score -= 100 if collision
   end
 
   def seek_food(move)
-    move
+    closest_food, distance = @board.closest_food_to_player
+    new_distance = @board.distance(move.location, closest_food)
+
+    # score goes down if we're further away, up if we're closer
+    move.score -= new_distance - distance
   end
 end

@@ -28,18 +28,13 @@ class Board
   end
 
   def enemy_collision_at?(loc)
-    log "looking for collisions at #{loc}"
+    log "looking for enemy collisions at #{loc}"
 
     @enemies.each do |enemy_locs|
       log "enemy: #{enemy_locs}"
-      collides = enemy_locs.include?(loc)
-      if enemy_locs.count >= @player_size
-        return collides, false
-      elsif enemy_locs[0] == loc
-        return collides, true
-      else
-        return collides, false
-      end
+
+      # can't collide with enemy tail, since they have to move too
+      return true if enemy_locs[0...-1].include?(loc)
     end
   end
 
@@ -66,6 +61,25 @@ class Board
 
   def food_locs
     @food_locs ||= @board_json[:food].map {|hash| to_loc(hash)}
+  end
+
+  def closest_food_loc_to_player
+    closest_food = @food_locs.first
+    min_distance_seen = distance(@player_loc, closest_food)
+
+    @food_locs[1..-1].each do |loc|
+      dist = distance(@player_loc, loc)
+
+      if dist < min_distance_seen
+        closest_food = loc
+        min_distance_seen = dist
+      end
+    end
+    return closest_food, min_distance_seen
+  end
+
+  def distance(loc1, loc2)
+    Math.sqrt((loc2.y - loc1.y)**2 + (loc2.x - loc1.x)**2 )
   end
 
   private
