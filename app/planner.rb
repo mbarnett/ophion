@@ -1,4 +1,5 @@
 require './app/move'
+require './app/util'
 
 class Planner
 
@@ -37,7 +38,8 @@ class Planner
   private
 
   def setup_location(move)
-    move.location = @board.send(*move.direction)
+    log move
+    move.location = @board.send(move.direction)
   end
 
   def avoid_bounds(move)
