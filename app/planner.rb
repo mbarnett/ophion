@@ -30,7 +30,14 @@ class Planner
   end
 
   def evaluate_position(move)
-    HEURISTICS.each { |heuristic| self.send(heuristic, move) }
+    HEURISTICS.each do |heuristic|
+      log "#{move.direction} current score #{move.score}"
+      log "Running #{heuristic}..."
+
+      self.send(heuristic, move)
+
+      log "#{move.direction} score after #{heuristic}: #{move.score}"
+    end
   end
 
   private
@@ -56,11 +63,12 @@ class Planner
   end
 
   def seek_food(move)
+    log "#{move.direction} score was: #{move.score}"
+
     closest_food, distance = @board.closest_food_to_player
     new_distance = @board.distance(move.location, closest_food)
 
     log "New food distance: #{new_distance}, change: #{new_distance - distance}"
-    log "#{move.direction} score was: #{move.score}"
 
     # score goes down if we're further away, up if we're closer
     move.score -= (new_distance - distance)
