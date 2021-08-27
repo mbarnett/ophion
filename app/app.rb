@@ -14,12 +14,18 @@ APPEARANCE = {
   tail: "bolt",
 }.freeze
 
-Config = Struct.new(:health_hunger_threshold, :length_hunger_threshold)
+Config = Struct.new(:health_hunger_threshold,
+                    :length_hunger_threshold,
+                    :minimum_search_threshold,
+                    :max_search_depth)
 
 def ok; 'OK'; end
 
 configure do
-  set :config, Config.new(ENV['HEALTH_HUNGER_THRESHOLD'].to_i, ENV['LENGTH_HUNGER_THRESHOLD'].to_i)
+  set :config, Config.new(ENV['HEALTH_HUNGER_THRESHOLD'].to_i,
+                          ENV['LENGTH_HUNGER_THRESHOLD'].to_i,
+                          ENV['MINIMUM_SEARCH_THRESHOLD'].to_i,
+                          ENV['MAXIMUM_SEARCH_DEPTH'].to_i)
 end
 
 before do
@@ -41,7 +47,7 @@ post '/start' do
 end
 
 post '/move' do
-  respond Ophion.choose_move(@world_state, settings.config).to_h
+  respond Ophion.new(settings.config).choose_move(@world_state).to_h
 end
 
 post '/end' do

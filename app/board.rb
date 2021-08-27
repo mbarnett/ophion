@@ -12,6 +12,7 @@ class Board
     @board_json = board_json
 
     @player_body_locs = player_json[:body].map {|hash| to_loc(hash)}
+    @player_tail_at = @player_body_locs.last
     @player_length = @player_body_locs.count
 
     @player_hungry = (player_json[:health] < config.health_hunger_threshold) || (@player_length < config.length_hunger_threshold)
@@ -36,7 +37,8 @@ class Board
 
   def player_hungry?; @player_hungry; end
 
-  def out_of_bounds?(x, y)
+  def out_of_bounds?(loc)
+    x, y = loc
     (x < 0) || (y < 0) || (x >= @max_x) || (y >= @max_y)
   end
 
@@ -60,6 +62,10 @@ class Board
   def enemy_head_at?(loc)
     is_head = @enemy_heads.include?(loc)
     return is_head, @enemy_length_by_head[loc]
+  end
+
+  def player_tail_at?(loc)
+    @player_tail_at == loc
   end
 
   def up(x, y)

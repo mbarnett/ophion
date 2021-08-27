@@ -7,6 +7,7 @@ class Planner
     :avoid_bounds,
     :avoid_self,
     :avoid_others,
+    :avoid_deadends,
     :attack_weaker_avoid_stronger
   ].freeze
 
@@ -20,8 +21,10 @@ class Planner
     right: [[1,1], [2,0], [1,-1]]
   }
 
-  def initialize(board)
+  def initialize(board, config)
     @board = board
+    @config = config
+
     @moves = [:up, :down, :left, :right].map {|dir| MoveEvaluation.new(dir) }
     @moves.each {|move| setup_location(move) }
 
@@ -59,7 +62,7 @@ class Planner
   end
 
   def avoid_bounds(move)
-    move.score -= 100 if @board.out_of_bounds?(*move.location)
+    move.score -= 100 if @board.out_of_bounds?(move.location)
   end
 
   def avoid_self(move)
@@ -106,6 +109,36 @@ class Planner
       # sliiightly better to move into an eatable position, where the enemy might not actually
       # eat you, then to run straight out of bounds in fear
     end
+  end
+
+  def avoid_deadends(move)
+    return if move.score < @config.minimum_search_threshold
+
+    found_tail, depth_exceeded = search_for_tail(move.location, current_depth: 0, visited: Set.new)
+    move.score -= 100 unless found_tail || depth_exceeded
+  end
+
+  def search_for_tail(location, current_depth:, visited:)
+    return false, true if current_depth > @config.max_search_depth
+
+    offsets = [[1,0], [-1,0], [0,1], [0,-1]]
+    to_visit = []
+
+    adjacencies = offsets.zip([location]*4).map {|arr| arr.inject(:+)}
+
+    adjacencies.each do |adjacent_location|
+      next if visited.include?(adjacent_location)
+      return true, false if @board.player_tail_at?(adjacent_location)
+      to_visit << adjacent_location unless (@board.out_of_bounds(adjacent_location) || @board.player_body_collision_at(adjacent_location) || @board.enemy_collision_at(adjacent_location))
+    end
+
+    to_visit.each do |visiting_location|
+      found_tail, depth_exceeded = search_for_tail(visiting_location, current_depth + 1, visited: visited)
+      return found_tail, depth_exceeded if found_tail || depth_exceeded
+      visited << visiting_location
+    end
+
+    return false, false
   end
 
 end
