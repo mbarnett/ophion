@@ -1,7 +1,7 @@
 class Move
   attr_accessor :direction, :location, :score
 
-  def initialize(direction)
+  def initialize(dir)
     direction = dir
     score = 0
     location = nil
