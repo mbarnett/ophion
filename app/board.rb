@@ -34,7 +34,7 @@ class Board
   end
 
   def food_locs
-  	@food_locs = @board_json[:food].map(&:to_loc)
+  	@food_locs = @board_json[:food].map {|hash| to_loc(hash)}
   end
 
   private

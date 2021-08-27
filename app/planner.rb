@@ -14,11 +14,11 @@ class Planner
     @moves = [Move.new(direction: :up, score: 0),
              Move.new(direction: :down, score: 0),
              Move.new(direction: :left, score: 0),
-             Move.new(direction: :right, score: 0)].each(&:setup_location)
+             Move.new(direction: :right, score: 0)].each {|move| setup_location(move) }
   end
 
   def best_move(available_moves)
-    evaluations = @moves.map(&:evaluate_position)
+    evaluations = @moves.map {|move| evaluate_position(move) }
 
     log evaluations
 
