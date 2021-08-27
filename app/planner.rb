@@ -3,6 +3,8 @@ require './app/util'
 
 class Planner
 
+  DIRECTIONS = [:up, :down, :left, :right].freeze
+
   DEFAULT_HEURISTICS = [
     :avoid_bounds,
     :avoid_self,
@@ -25,7 +27,7 @@ class Planner
     @board = board
     @config = config
 
-    @moves = [:up, :down, :left, :right].map {|dir| MoveEvaluation.new(dir) }
+    @moves = DIRECTIONS.map {|dir| MoveEvaluation.new(dir) }
     @moves.each {|move| setup_location(move) }
 
     @current_strategy = board.player_hungry? ? HUNGRY_HEURISTICS : DEFENSIVE_HEURISTICS
@@ -121,11 +123,9 @@ class Planner
     return if current_depth > @config.max_search_depth
 
     visited << location
-
-    offsets = [[1,0], [-1,0], [0,1], [0,-1]]
     to_visit = []
 
-    adjacencies = offsets.map { |dx, dy| [location[0] + dx, location[1] + dy] }
+    adjacencies = DIRECTIONS.map { |dir| @board.send(dir, *location)}
 
     adjacencies.each do |adjacent_location|
       to_visit << adjacent_location unless (@board.out_of_bounds?(adjacent_location) || @board.player_body_collision_at?(adjacent_location) || @board.enemy_collision_at?(adjacent_location))
