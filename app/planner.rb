@@ -1,4 +1,4 @@
-require 'move'
+require './app/move'
 
 class Planner
 
