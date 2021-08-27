@@ -1,11 +1,9 @@
 
 class Board
-  attr_accessor :player_loc
+  attr_accessor :player_loc, :player_length
 
   def initialize(player_json, board_json)
     player_id = player_json[:id]
-
-    @player_hungry = (player_json[:health] < 40)
 
     log "Board: #{board_json}"
 
@@ -16,9 +14,21 @@ class Board
     @player_body_locs = player_json[:body].map {|hash| to_loc(hash)}
     @player_size = @player_body_locs.count
 
-    @enemies = board_json[:snakes].select {|snake| snake[:id] != player_id}.map do |snake|
-      snake[:body].map {|hash| to_loc(hash)}
+    @player_hungry = (player_json[:health] < 20) || (@player_size < 4)
+
+    @enemies = []
+    @enemy_heads = []
+    @enemy_health_by_head = {}
+
+    board_json[:snakes].select {|snake| snake[:id] != player_id}.each do |snake|
+      snake_locs = snake[:body].map {|hash| to_loc(hash)}
+      head = snake_locs.first
+      @enemies << snake_locs
+      @enemy_heads << head
+      @enemy_length_by_head[head] = snake_locs.count
     end
+
+    @enemy_heads = @enemies.map { |enemy| enemy.first }
 
     @food_locs = @board_json[:food].map {|hash| to_loc(hash)}
     log "Food: #{@food_locs}"
@@ -45,6 +55,12 @@ class Board
       return true if enemy_locs[0...-1].include?(loc)
     end
     false
+  end
+
+  def enemy_head_at?(loc)
+    is_head = @enemy_heads.include?(loc)
+
+    return is_head, @enemy_length_by_head[loc]
   end
 
   def up(x, y)

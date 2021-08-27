@@ -1,4 +1,4 @@
-class Move
+class MoveEvaluation
   attr_accessor :direction, :location, :score
 
   def initialize(dir)

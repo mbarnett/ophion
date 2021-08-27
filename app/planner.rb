@@ -1,4 +1,4 @@
-require './app/move'
+require './app/move_evaluation'
 require './app/util'
 
 class Planner
@@ -6,22 +6,30 @@ class Planner
   DEFAULT_HEURISTICS = [
     :avoid_bounds,
     :avoid_self,
-    :avoid_others
+    :avoid_others,
+    :attack_weaker_avoid_stronger
   ].freeze
 
   HUNGRY_HEURISTICS = (DEFAULT_HEURISTICS + [:seek_food]).freeze
   DEFENSIVE_HEURISTICS = (DEFAULT_HEURISTICS + [:seek_corner]).freeze
 
+  ATTACKABLE_LOCATION_OFFSETS = {
+    up: [[0,2], [-1,1], [1,1]],
+    down: [[0,-2],[-1,-1],[1,-1] ],
+    left: [[-1,1], [-2,0], [-1,-1]],
+    right: [[1,1], [2,0], [1,-1]]
+  }
+
   def initialize(board)
     @board = board
-    @moves = [:up, :down, :left, :right].map {|dir| Move.new(dir) }
+    @moves = [:up, :down, :left, :right].map {|dir| MoveEvaluation.new(dir) }
     @moves.each {|move| setup_location(move) }
 
     @current_strategy = board.player_hungry? ? HUNGRY_HEURISTICS : DEFENSIVE_HEURISTICS
   end
 
   def best_move
-    evaluations = @moves.map {|move| evaluate_position(move); move }.sort
+    evaluations = @moves.map {|move| evaluate_position(move) }.sort
 
     evaluations.each do |evaluation|
       log "direction: #{evaluation.direction}, score: #{evaluation.score}"
@@ -39,6 +47,7 @@ class Planner
 
       log "#{move.direction} score after #{heuristic}: #{move.score}"
     end
+    move
   end
 
   private
@@ -79,4 +88,18 @@ class Planner
     # score goes down if we're further away, up if we're closer
     move.score -= (new_distance - distance)
   end
+
+  def attack_weaker_avoid_stronger(move)
+    ATTACKABLE_LOCATION_OFFSETS[move.direction].each do |offset|
+      attackable_location = @board.player_loc.zip(offset).map {|arr| arr.inject(&:+)}
+
+      log "Attackable: #{attackable_location}"
+
+      enemy_present, enemy_length = @board.enemy_head_at?(attackable_location)
+
+      move.score += 10 if enemy_present && (enemy_length < @board.player_length)
+      move.score -= 100 if enemy_present && (enemy_length >= @board.player_length)
+    end
+  end
+
 end
