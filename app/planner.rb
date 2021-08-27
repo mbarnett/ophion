@@ -49,6 +49,9 @@ class Planner
 
   def avoid_others(move)
     collision, favorable = @board.enemy_collision_at?(move.location)
+
+    log "collides? #{collision}, favorable? #{favorable}"
+
     move.score -= 100 if collision && !favorable
     move.score += 50 if collision && favorable
   end

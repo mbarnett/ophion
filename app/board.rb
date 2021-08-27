@@ -28,7 +28,10 @@ class Board
   end
 
   def enemy_collision_at?(loc)
+    log "looking for collisions at #{loc}"
+
     @enemies.each do |enemy_locs|
+      log "enemy: #{enemy_locs}"
       collides = enemy_locs.include?(loc)
       if enemy_locs.count >= @player_size
         return collides, false
