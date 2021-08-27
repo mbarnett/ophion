@@ -18,7 +18,7 @@ class Board
 
     @enemies = []
     @enemy_heads = []
-    @enemy_health_by_head = {}
+    @enemy_length_by_head = {}
 
     board_json[:snakes].select {|snake| snake[:id] != player_id}.each do |snake|
       snake_locs = snake[:body].map {|hash| to_loc(hash)}
