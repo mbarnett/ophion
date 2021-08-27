@@ -6,6 +6,7 @@ class Board
     player_id = player_json[:id]
 
     @max_x = board_json[:width]; @max_y = board_json[:height]
+
     @player_loc = to_loc(player_json[:head])
     @board_json = board_json
 
@@ -34,7 +35,9 @@ class Board
     @food_locs = @board_json[:food].map {|hash| to_loc(hash)}
   end
 
-  def player_hungry?; @player_hungry; end
+  def player_hungry?
+    @player_hungry
+  end
 
   def out_of_bounds?(loc)
     x, y = loc

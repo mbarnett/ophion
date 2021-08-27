@@ -36,7 +36,6 @@ before do
   content_type :json
 end
 
-# routes
 get '/' do
   respond APPEARANCE
 end

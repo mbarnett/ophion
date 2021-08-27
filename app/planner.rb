@@ -32,8 +32,6 @@ class Planner
   end
 
   def best_move
-    log "Player loc: #{@board.player_loc}"
-    log "Player length: #{@board.player_length}"
     evaluations = @moves.map {|move| evaluate_position(move) }.sort
 
     evaluations.each do |evaluation|
@@ -110,8 +108,6 @@ class Planner
 
     log "Search: #{move.direction} at #{move.location}"
     search_for_deadend(move.location, current_depth: 0, visited: visited)
-
-    puts @config.max_search_depth
 
     unless visited.count > @config.max_search_depth
       move.score -= (100 - visited.count) if (visited.count < @board.player_length)
