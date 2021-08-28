@@ -62,17 +62,17 @@ class Planner
   end
 
   def avoid_bounds(move)
-    move.score -= 100 if @board.out_of_bounds?(move.location)
+    move.score -= 200 if @board.out_of_bounds?(move.location)
   end
 
   def avoid_self(move)
-    move.score -= 100 if @board.player_body_collision_at?(move.location)
+    move.score -= 200 if @board.player_body_collision_at?(move.location)
   end
 
   def avoid_others(move)
     collision = @board.enemy_collision_at?(move.location)
 
-    move.score -= 100 if collision
+    move.score -= 200 if collision
   end
 
   def seek_food(move)
