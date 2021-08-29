@@ -31,6 +31,8 @@ class Planner
     @moves.each {|move| setup_location(move) }
 
     @current_strategy = board.player_hungry? ? HUNGRY_HEURISTICS : DEFENSIVE_HEURISTICS
+
+    log "strategy: #{board.player_hungry? ? 'seek food' : 'seek corner'}"
   end
 
   def best_move
@@ -44,14 +46,7 @@ class Planner
   end
 
   def evaluate_position(move)
-    @current_strategy.each do |heuristic|
-      log "#{move.direction} current score #{move.score}"
-      log "Running #{heuristic}..."
-
-      self.send(heuristic, move)
-
-      log "#{move.direction} score after #{heuristic}: #{move.score}"
-    end
+    @current_strategy.each { |heuristic| self.send(heuristic, move) }
     move
   end
 
@@ -93,7 +88,6 @@ class Planner
   def attack_weaker_avoid_stronger(move)
     ATTACKABLE_LOCATION_OFFSETS[move.direction].each do |offset|
       attackable_location = @board.player_loc.zip(offset).map {|arr| arr.inject(&:+)}
-      log "attackable_location: #{attackable_location}"
       enemy_present, enemy_length = @board.enemy_head_at?(attackable_location)
 
       move.score += 10 if enemy_present && (enemy_length < @board.player_length)
@@ -108,8 +102,9 @@ class Planner
 
     visited = Set.new
 
-    log "Search: #{move.direction} at #{move.location}"
     search_for_deadend(move.location, current_depth: 0, visited: visited)
+
+    log "depth #{move.direction}: #{visited.count}"
 
     unless visited.count > @config.max_search_depth
       # deadends are bad, but we want a larger deadend to be worth more than a smaller one

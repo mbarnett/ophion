@@ -89,14 +89,12 @@ class Board
 
   def closest_food_to_player
     closest_food, distance = closest_entity_to_player(@food_locs)
-    log "Closest food: #{closest_food}, dist: #{distance}"
 
     return closest_food, distance
   end
 
   def closest_corner_to_player
     closest_corner, distance = closest_entity_to_player(corners)
-    log "Closest corner: #{closest_corner}, dist: #{distance}"
 
     return closest_corner, distance
   end
