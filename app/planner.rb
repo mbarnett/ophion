@@ -123,13 +123,23 @@ class Planner
     adjacencies = DIRECTIONS.map { |dir| @board.send(dir, *location)}
 
     adjacencies.each do |adjacent_location|
-      to_visit << adjacent_location unless (@board.out_of_bounds?(adjacent_location) || @board.player_body_collision_at?(adjacent_location) || @board.enemy_collision_at?(adjacent_location))
+      to_visit << adjacent_location unless any_collisions?(adjacent_location) || ((current_depth > 0) && (closable_location(adjacent_location)))
     end
 
     to_visit.each do |visiting_location|
       next if visited.include?(visiting_location)
       search_for_deadend(visiting_location, current_depth: current_depth + 1, visited: visited)
     end
+  end
+
+  def any_collisions?(loc)
+    @board.out_of_bounds?(loc) || @board.player_body_collision_at?(loc) || @board.enemy_collision_at?(loc)
+  end
+
+  def closable_location(loc)
+    adjacencies = DIRECTIONS.map { |dir| @board.send(dir, *loc)}
+
+    return adjacencies.any? {|location| present, _ = @board.enemy_head_at?(location); present }
   end
 
 end
